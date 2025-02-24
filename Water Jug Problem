@@ -1,0 +1,29 @@
+from collections import deque
+
+def water_jug_problem():
+    capacity1, capacity2 = 3, 5
+    goal = 4
+    visited = set()
+    queue = deque([(0, 0)])
+
+    while queue:
+        jug1, jug2 = queue.popleft()
+        if (jug1, jug2) in visited:
+            continue
+        visited.add((jug1, jug2))
+        print(f"Jug1: {jug1}L, Jug2: {jug2}L")
+        if jug1 == goal or jug2 == goal:
+            print(f"Goal reached with Jug1: {jug1}L, Jug2: {jug2}L")
+            return
+
+        queue.append((capacity1, jug2))
+        queue.append((jug1, capacity2))
+        queue.append((0, jug2))
+        queue.append((jug1, 0))
+        transfer = min(jug1, capacity2 - jug2)
+        queue.append((jug1 - transfer, jug2 + transfer))
+        transfer = min(jug2, capacity1 - jug1)
+        queue.append((jug1 + transfer, jug2 - transfer))
+    print("Solution not found.")
+
+water_jug_problem()
