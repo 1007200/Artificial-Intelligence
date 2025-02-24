@@ -1,0 +1,28 @@
+class TableDrivenAgent:
+    def __init__(self):  # Fixed method name
+        self.table = {
+            (True, True, True, True): "Clean A",
+            (False, True, True, True): "Clean B",
+            (False, False, True, True): "Clean C",
+            (False, False, False, True): "Clean D",
+            (False, False, False, False): "No Action",
+        }
+    
+    def get_action(self, state):
+        return self.table.get(state, "Invalid State")
+
+    def perform_cleaning(self, state):
+        updated_state = list(state)
+        action = self.get_action(tuple(state))
+        print(f"Action: {action}")
+        if action.startswith("Clean"):
+            room = action.split(" ")[1]
+            index = ["A", "B", "C", "D"].index(room)
+            updated_state[index] = False
+        return tuple(updated_state)
+
+state = (True, True, True, True)
+agent = TableDrivenAgent()
+while state != (False, False, False, False):
+    state = agent.perform_cleaning(state)
+    print(f"Updated State: {state}")
