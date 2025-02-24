@@ -1,0 +1,59 @@
+from collections import deque
+
+def dfs(graph, start, goal):
+    stack = [(start, [start])]
+    visited = set()
+    tree = {}
+    while stack:
+        node, path = stack.pop()
+        if node not in visited:
+            visited.add(node)
+            tree[node] = path[:-1]
+            if node == goal:
+                return path, tree
+            for neighbor in reversed(graph.get(node, [])):
+                if neighbor not in visited:
+                    stack.append((neighbor, path + [neighbor]))
+    return None, tree
+
+def bfs(graph, start, goal):
+    queue = deque([(start, [start])])
+    visited = set()
+    tree = {}
+    while queue:
+        node, path = queue.popleft()
+        if node not in visited:
+            visited.add(node)
+            tree[node] = path[:-1]
+            if node == goal:
+                return path, tree
+            for neighbor in graph.get(node, []):
+                if neighbor not in visited:
+                    queue.append((neighbor, path + [neighbor]))
+    return None, tree
+
+def display_tree(tree):
+    print("Tree Structure:")
+    for node, parent in tree.items():
+        print(f"Node: {node}, Parent Path: {parent}")
+
+graph = {
+    'A': ['B', 'C'],
+    'B': ['D', 'E'],
+    'C': ['F'],
+    'D': [],
+    'E': ['G'],
+    'F': [],
+    'G': []
+}
+start = 'A'
+goal = 'G'
+print("\nDepth First Search:")
+dfs_path, dfs_tree = dfs(graph, start, goal)
+print(f"DFS Path: {dfs_path}")
+display_tree(dfs_tree)
+
+print("\nBreadth First Search:")
+bfs_path, bfs_tree = bfs(graph, start, goal)
+print(f"BFS Path: {bfs_path}")
+display_tree(bfs_tree)
